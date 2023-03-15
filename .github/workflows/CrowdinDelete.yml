@@ -10,7 +10,11 @@ jobs:
     if: github.event.ref != 'refs/heads/main'
     steps:
       - name: Get branch name
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+        run: |
+          BRANCH_NAME=${{ github.event.ref }}
+          BRANCH_NAME=${BRANCH_NAME#refs/heads/}
+          echo "Deleted branch name: $BRANCH_NAME"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
       - name: crowdin-delete
         uses: crowdin/github-action@v1.7.1
