@@ -25,7 +25,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "测试文本"
+        title = "测试文本".localized()
     }
 
 
