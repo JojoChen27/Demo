@@ -1,0 +1,27 @@
+#!/bin/bash
+cd $(dirname $0)
+set -e
+echo "开始执行本地化脚本"
+# git 仓库文件夹
+GIT_TOP_DIR="$(git rev-parse --show-toplevel)"
+# 代码文件
+CODE_DIR="${GIT_TOP_DIR}/GithubActionsDemo"
+# localize 路径
+LOCALIZE="${GIT_TOP_DIR}/localize"
+# 简体中文文件
+ZH_HANS="${GIT_TOP_DIR}/GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings"
+# 繁体中文文件
+ZH_HANT="${GIT_TOP_DIR}/GithubActionsDemo/GithubActionsDemo/zh-Hant.lproj/Localizable.strings"
+# 忽略R.swift
+EXCLUDE_RSWIFT="--exclude-files ${GIT_TOP_DIR}/Supporting\ Files/R.generated.swift"
+# 忽略函数
+EXCLUDE_PRINT="--exclude-functions print"
+EXCLUDE_DEBUGPRINT="--exclude-functions debugPrint"
+EXCLUDE_LOGINFO="--exclude-functions logInfo"
+EXCLUDE_LOGDEBUG="--exclude-functions logDebug"
+EXCLUDE_LOGERROR="--exclude-functions logError"
+EXCLUDE_LOGWARN="--exclude-functions logWarn"
+EXCLUDE_LOGVERBOSE="--exclude-functions logVerbose"
+EXCLUDE_BLOG="--exclude-functions Blog"
+# 执行本地化工具，具体参数参考 localize --help
+echo "$LOCALIZE file ${CODE_DIR} -s ${ZH_HANS} -t ${ZH_HANT} --zhHant-type 1 ${EXCLUDE_RSWIFT} ${EXCLUDE_PRINT} ${EXCLUDE_DEBUGPRINT} ${EXCLUDE_LOGINFO} ${EXCLUDE_LOGDEBUG} ${EXCLUDE_LOGERROR} ${EXCLUDE_LOGWARN} ${EXCLUDE_LOGVERBOSE} ${EXCLUDE_BLOG} --reset" | sh

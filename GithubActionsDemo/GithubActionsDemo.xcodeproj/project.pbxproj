@@ -13,6 +13,7 @@
 		2A7CAC1D29C1DEF4009E4D3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A7CAC1B29C1DEF4009E4D3E /* Main.storyboard */; };
 		2A7CAC1F29C1DEF5009E4D3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A7CAC1E29C1DEF5009E4D3E /* Assets.xcassets */; };
 		2A7CAC2229C1DEF5009E4D3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A7CAC2029C1DEF5009E4D3E /* LaunchScreen.storyboard */; };
+		2A7CAC2B29C1E0D9009E4D3E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2A7CAC2D29C1E0D9009E4D3E /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,13 @@
 		2A7CAC1E29C1DEF5009E4D3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A7CAC2129C1DEF5009E4D3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A7CAC2329C1DEF5009E4D3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A7CAC2C29C1E0D9009E4D3E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2A7CAC2E29C1E0F2009E4D3E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		2A7CAC2F29C1E0F2009E4D3E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		2A7CAC3029C1E0F2009E4D3E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		2A7CAC3129C1E0F6009E4D3E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		2A7CAC3229C1E0F6009E4D3E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		2A7CAC3329C1E0F6009E4D3E /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +71,7 @@
 				2A7CAC1E29C1DEF5009E4D3E /* Assets.xcassets */,
 				2A7CAC2029C1DEF5009E4D3E /* LaunchScreen.storyboard */,
 				2A7CAC2329C1DEF5009E4D3E /* Info.plist */,
+				2A7CAC2D29C1E0D9009E4D3E /* Localizable.strings */,
 			);
 			path = GithubActionsDemo;
 			sourceTree = "<group>";
@@ -109,6 +118,8 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 2A7CAC0929C1DEF4009E4D3E;
 			productRefGroup = 2A7CAC1329C1DEF4009E4D3E /* Products */;
@@ -126,6 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A7CAC2229C1DEF5009E4D3E /* LaunchScreen.storyboard in Resources */,
+				2A7CAC2B29C1E0D9009E4D3E /* Localizable.strings in Resources */,
 				2A7CAC1F29C1DEF5009E4D3E /* Assets.xcassets in Resources */,
 				2A7CAC1D29C1DEF4009E4D3E /* Main.storyboard in Resources */,
 			);
@@ -151,6 +163,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				2A7CAC1C29C1DEF4009E4D3E /* Base */,
+				2A7CAC2E29C1E0F2009E4D3E /* zh-Hans */,
+				2A7CAC3129C1E0F6009E4D3E /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -159,8 +173,20 @@
 			isa = PBXVariantGroup;
 			children = (
 				2A7CAC2129C1DEF5009E4D3E /* Base */,
+				2A7CAC2F29C1E0F2009E4D3E /* zh-Hans */,
+				2A7CAC3229C1E0F6009E4D3E /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		2A7CAC2D29C1E0D9009E4D3E /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A7CAC2C29C1E0D9009E4D3E /* en */,
+				2A7CAC3029C1E0F2009E4D3E /* zh-Hans */,
+				2A7CAC3329C1E0F6009E4D3E /* zh-Hant */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -170,6 +196,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -230,6 +257,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
