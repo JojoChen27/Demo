@@ -27,5 +27,3 @@ jobs:
           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
