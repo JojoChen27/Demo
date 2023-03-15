@@ -2,14 +2,12 @@ name: Crowdin delete
 
 on:
   delete:
-    branches:
-      - '**'
-    branches-ignore:
-      - 'main'
+    branches: '**'
 
 jobs:
   crowdin:
     runs-on: ubuntu-latest
+    if: github.event.ref != 'refs/heads/main'
     steps:
       - name: Get branch name
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
@@ -21,6 +19,8 @@ jobs:
           upload_translations: false
           download_translations: false
           delete_crowdin_branch: "${{ env.BRANCH_NAME }}"
+          source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         env:
