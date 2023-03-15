@@ -5,14 +5,9 @@ on:
 jobs:
   my-job:
     runs-on: ubuntu-latest
-    env:
-      BRANCH_NAME: ${{ github.ref }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set branch name environment variable
-        run: |
-          export BRANCH_NAME=$(echo ${{ github.ref }} | sed 's/refs\/heads\///')
-          echo "Current branch is $BRANCH_NAME"
+      - name: Get branch name
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - name: Use branch name in another step
         run: echo "Branch name is ${{ env.BRANCH_NAME }}"
