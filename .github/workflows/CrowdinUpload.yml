@@ -1,9 +1,7 @@
-name: Crowdin Action
+name: Crowdin upload
 
 on:
   push:
-    branches-ignore:
-      - 'main'
     paths:
       - 'GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings'
 
@@ -17,17 +15,14 @@ jobs:
       - name: Get branch name
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
-      - name: crowdin-sync
+      - name: crowdin-upload
         uses: crowdin/github-action@v1.7.1
         with:
           upload_sources: true
           upload_translations: false
+          download_translations: false
           crowdin_branch_name: "${{ env.BRANCH_NAME }}"
-          # Sources pattern
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
-          # Translations pattern
-          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
-
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         env:

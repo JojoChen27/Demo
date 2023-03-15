@@ -1,0 +1,27 @@
+name: Crowdin delete
+
+on:
+  delete:
+    branches:
+      - '**'
+    branches-ignore:
+      - 'main'
+
+jobs:
+  crowdin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch name
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
+      - name: crowdin-delete
+        uses: crowdin/github-action@v1.7.1
+        with:
+          upload_sources: false
+          upload_translations: false
+          download_translations: false
+          delete_crowdin_branch: "${{ env.BRANCH_NAME }}"
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
