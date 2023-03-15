@@ -17,7 +17,7 @@ jobs:
           download_translations: true
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
-          crowdin_branch_name: $(echo $GITHUB_REF | sed 's/refs\/heads\///')"
+          crowdin_branch_name: "$(echo $GITHUB_REF | sed 's/refs\/heads\///')"
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         env:
