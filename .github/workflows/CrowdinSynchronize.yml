@@ -1,13 +1,34 @@
-name: My Workflow
+name: Crowdin Action
+
 on:
-    workflow_dispatch:
+  push:
+    branches-ignore:
+      - 'main'
+    paths:
+      - 'GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings'
 
 jobs:
-  my-job:
+  crowdin:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
       - name: Get branch name
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-      - name: Use branch name in another step
-        run: echo "Branch name is ${{ env.BRANCH_NAME }}"
+
+      - name: crowdin-sync
+        uses: crowdin/github-action@v1.7.1
+        with:
+          upload_sources: true
+          upload_translations: false
+          crowdin_branch_name: "${{ env.BRANCH_NAME }}"
+          # Sources pattern
+          source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+          # Translations pattern
+          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
