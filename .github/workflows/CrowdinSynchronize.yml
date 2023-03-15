@@ -13,13 +13,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: crowdin action
-        uses: crowdin/github-action@v1
+        uses: crowdin/github-action@v1.7.1
         with:
           upload_sources: true
           download_translations: true
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
