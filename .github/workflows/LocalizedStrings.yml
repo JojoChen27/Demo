@@ -5,7 +5,7 @@ on:
 
 jobs:
   run-script:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -27,11 +27,3 @@ jobs:
       env:
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
         CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-
-    - name: Commit changes
-      run: |
-        git config --global user.name "JJ"
-        git config --global user.email "JJ@example.com"
-        git add .
-        git commit -m "Automated commit"
-        git push
