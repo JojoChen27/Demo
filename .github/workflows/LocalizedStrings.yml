@@ -16,6 +16,17 @@ jobs:
 
     - name: Run script
       run: ./LocalizeAll
+    
+    - name: crowdin-action
+      uses: crowdin/github-action@v1.7.1
+      with:
+        upload_sources: true
+        download_translations: true
+        source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+        translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+      env:
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
     - name: Commit changes
       run: |
