@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: echo
-        run: echo ${{ env.BRANCH_NAME }}
       - name: crowdin action
         uses: crowdin/github-action@v1.7.1
         with:
@@ -19,7 +17,7 @@ jobs:
           download_translations: true
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
-          crowdin_branch_name: ${{ env.BRANCH_NAME }}
+          crowdin_branch_name: main
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         env:
