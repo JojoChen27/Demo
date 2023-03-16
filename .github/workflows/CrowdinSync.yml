@@ -31,7 +31,7 @@ jobs:
 
       - name: Crowdin upload
         uses: crowdin/github-action@v1.7.1
-          with:
+        with:
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
           crowdin_branch_name: "${{ env.BRANCH_NAME }}"
