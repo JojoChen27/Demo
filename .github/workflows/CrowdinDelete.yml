@@ -1,4 +1,4 @@
-name: Crowdin delete
+name: Crowdin Delete
 
 on:
   delete:
@@ -16,7 +16,7 @@ jobs:
           echo "Deleted branch name: $BRANCH_NAME"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
-      - name: crowdin-delete
+      - name: Crowdin delete
         uses: crowdin/github-action@v1.7.1
         with:
           upload_sources: false

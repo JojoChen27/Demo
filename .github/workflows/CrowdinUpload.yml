@@ -1,4 +1,4 @@
-name: Crowdin upload
+name: Crowdin Upload
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
       - name: Get branch name
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
-      - name: crowdin-upload
+      - name: Crowdin upload
         uses: crowdin/github-action@v1.7.1
         with:
           upload_sources: true
