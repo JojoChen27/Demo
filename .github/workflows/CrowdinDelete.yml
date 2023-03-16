@@ -1,29 +1,29 @@
-name: Crowdin Delete
+# name: Crowdin Delete
 
-on:
-  delete:
-    branches: '**'
+# on:
+#   delete:
+#     branches: '**'
 
-jobs:
-  crowdin-delete:
-    runs-on: ubuntu-latest
-    if: github.event.ref != 'refs/heads/main'
-    steps:
-      - name: Get branch name
-        run: |
-          BRANCH_NAME=${{ github.event.ref }}
-          BRANCH_NAME=${BRANCH_NAME#refs/heads/}
-          echo "Deleted branch name: $BRANCH_NAME"
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+# jobs:
+#   crowdin-delete:
+#     runs-on: ubuntu-latest
+#     if: github.event.ref != 'refs/heads/main'
+#     steps:
+#       - name: Get branch name
+#         run: |
+#           BRANCH_NAME=${{ github.event.ref }}
+#           BRANCH_NAME=${BRANCH_NAME#refs/heads/}
+#           echo "Deleted branch name: $BRANCH_NAME"
+#           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
-      - name: Crowdin delete
-        uses: crowdin/github-action@v1.7.1
-        with:
-          upload_sources: false
-          upload_translations: false
-          download_translations: false
-          delete_crowdin_branch: "${{ env.BRANCH_NAME }}"
-          source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
-          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
-          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+#       - name: Crowdin delete
+#         uses: crowdin/github-action@v1.7.1
+#         with:
+#           upload_sources: false
+#           upload_translations: false
+#           download_translations: false
+#           delete_crowdin_branch: "${{ env.BRANCH_NAME }}"
+#           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+#           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+#           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+#           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
