@@ -1,11 +1,79 @@
 #!/bin/bash
 
+# 获取分支ID
+function get_branch_id() {
+  local api_token="$1"
+  local project_id="$2"
+  local branch_name="$3"
 
-# 1. 获取当前 git 分支名
+  # 调用 Crowdin API 获取分支列表
+  branches_json=$(curl -s -X GET "https://api.crowdin.com/api/v2/projects/$project_id/branches" \
+                  -H "Accept: application/json" \
+                  -H "Authorization: Bearer $api_token")
+  # echo "$branches_json" | python3 -m json.tool
+  # 使用 Python 解析 JSON 响应并提取匹配分支名称的分支 ID
+  branch_id=$(python3 -c "import json; branches = json.loads('$branches_json')['data']; \
+              print(next((b['data']['id'] for b in branches if b['data']['name'] == '$branch_name'), None))")
+
+  echo "$branch_id"
+}
+
+# 获取文件id
+function get_crowdin_file_id() {
+  local api_token="$1"
+  local project_id="$2"
+  local file_name="$3"
+  local branch_id="$4"
+
+  file_details_json=$(curl -s -X GET "https://api.crowdin.com/api/v2/projects/$project_id/files?branchId=$branch_id&filter=$file_name" \
+                    -H "Accept: application/json" \
+                    -H "Authorization: Bearer $api_token")
+  # echo "$file_details_json" | python3 -m json.tool
+  file_id=$(python3 -c "import json; file = json.loads('$file_details_json')['data'][0]; \
+              print(file['data']['id'])")
+
+  echo "$file_id"
+}
+
+# 获取 Revision
+function get_file_revision() {
+  local api_token="$1"
+  local project_id="$2"
+  local file_id="$3"
+
+  list_file_revisions_json=$(curl -s -X GET "https://api.crowdin.com/api/v2/projects/$project_id/files/$file_id/revisions" \
+                    -H "Accept: application/json" \
+                    -H "Authorization: Bearer $api_token")
+  # echo "$list_file_revisions_json" | python3 -m json.tool
+  revision=$(python3 -c "import json; from datetime import datetime, timezone; revision = json.loads('$list_file_revisions_json')['data'][0]['data']; \
+              print('date:', datetime.fromisoformat(revision['date']).astimezone(timezone.utc).astimezone(), \
+              ' added:', revision['info']['added']['strings'], \
+              ' deleted:', revision['info']['deleted']['strings'], \
+              ' updated:', revision['info']['updated']['strings'])")
+
+  echo "$revision"
+}
+
+# 执行脚本
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
 
-# 2. 上传翻译的源文件到 Crowdin 分支
-crowdin upload sources --auto-update -b $BRANCH_NAME
+# echo ">>>> Crowdin upload sources to $BRANCH_NAME"
+# crowdin upload sources -b $BRANCH_NAME
 
-# 3. 下载翻译文件到项目
-crowdin download -b $BRANCH_NAME
+# echo ">>>> Download translations from $BRANCH_NAME branch to project"
+# crowdin download -b $BRANCH_NAME
+
+CROWDIN_PROJECT_ID="574515"
+CROWDIN_API_TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJ3UUVxdmhVM3ZMT2EyWGljbVV5VCIsImp0aSI6IjVkNjkyNTQ1ZTQyZjk0YzdmZTJiMDY4NmJmMmI0NGQ3MDIxYjE1ODA0NmYxNDAwYmY4YzEzOTZkOGU2NTQ2YzZjNGE3OTgxYTRlMTJjNzY3IiwiaWF0IjoxNjc4OTY3MDcyLjI2OTAxMiwibmJmIjoxNjc4OTY3MDcyLjI2OTAxNywiZXhwIjoxNjgxNTU5MDcyLjE5OTA3Niwic3ViIjoiMTQ5NjkyMTkiLCJzY29wZXMiOlsicHJvamVjdCJdLCJkb21haW4iOm51bGwsImFzc29jaWF0aW9ucyI6WyIqIl0sInNlc3Npb24iOjB9.D9Ns2lFEswSEhH7cE-CZFF7--6Bq_db89pxNF765kFHSmLpaRCA5nTzeIgo7d9Ii94wBzedFsDCpmmWDvkbCpAeHr2iRLMICAIgnuCpqjlad3a0emqiTuVBG8b1_uWnXgfEDfFDlznDckn02v1NLf4N2Mw2V55edvHKAun5rgWvrY_PLyBdwZiZMdNA2xXwkAws7MztdH5Wo-A7OXXXorzENFhEB7o96vD9ONHNe1T9ii43YwHDMzv-9ivVbLbsICpmFsn5kxLrgrmfzmCFY-icso6eBC7PclmMDIbklLQgtNy7P_VFlC1eQTRiyIKFw7F_b-zvFxd2edLqUfjY4DNCHv4yNpF5doVAETlpPQhzg-IBKw0wUrPtGxI-nndB_M3K0Z77BLyBazD5NKD0vWO5G1RDMT_UTqUfkR9PBJwKHH4rIwRVzPZjv_WznOS77ofDLhQIGgfgkvLBmSM9_L-J7jjsGDG6_2pdgMsWQsHURwNUkN91xeRWNkqm9vlIBi8hXdAXvYiTrj6F4TaZBpLfg1EeDkfiHteDP0QIRd6DIytbp5qDoGitpHCHBJh992SGq_x75qgurpC-tBKdBm626toMxvc6tnotIn_hRHgq-_1so7bQdpmpajQnyHf4Pu8KMQl-jBtSI8QihPQOLe5ArYu3S2tLEyy8pbo_epnI"
+
+BRANCH_ID=$(get_branch_id "$CROWDIN_API_TOKEN" "$CROWDIN_PROJECT_ID" "$BRANCH_NAME")
+echo "Branch ID: $BRANCH_ID"
+
+FILE_NAME="Localizable.strings"
+echo "File Name: $FILE_NAME"
+
+FILE_ID=$(get_crowdin_file_id "$CROWDIN_API_TOKEN" "$CROWDIN_PROJECT_ID" "$FILE_NAME" "$BRANCH_ID")
+echo "File ID: $FILE_ID"
+
+REVISION=$(get_file_revision "$CROWDIN_API_TOKEN" "$CROWDIN_PROJECT_ID" "$FILE_ID")
+echo "Current revision: $REVISION"
