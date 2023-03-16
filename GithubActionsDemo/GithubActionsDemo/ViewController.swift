@@ -30,6 +30,7 @@ class ViewController: UIViewController {
         title = "测试1".localized()
         title = "测试3".localized()
         title = "测试4"
+        title = "测试5"
     }
 
 
