@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+# 1. 获取当前 git 分支名
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+# 2. 上传翻译的源文件到 Crowdin 分支
+crowdin upload sources --auto-update -b $BRANCH_NAME
+
+# 3. 下载翻译文件到项目
+crowdin download -b $BRANCH_NAME

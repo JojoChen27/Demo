@@ -1,0 +1,127 @@
+#
+# Your Crowdin credentials
+#
+"project_id" : "574515"
+"api_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJ3UUVxdmhVM3ZMT2EyWGljbVV5VCIsImp0aSI6IjVkNjkyNTQ1ZTQyZjk0YzdmZTJiMDY4NmJmMmI0NGQ3MDIxYjE1ODA0NmYxNDAwYmY4YzEzOTZkOGU2NTQ2YzZjNGE3OTgxYTRlMTJjNzY3IiwiaWF0IjoxNjc4OTY3MDcyLjI2OTAxMiwibmJmIjoxNjc4OTY3MDcyLjI2OTAxNywiZXhwIjoxNjgxNTU5MDcyLjE5OTA3Niwic3ViIjoiMTQ5NjkyMTkiLCJzY29wZXMiOlsicHJvamVjdCJdLCJkb21haW4iOm51bGwsImFzc29jaWF0aW9ucyI6WyIqIl0sInNlc3Npb24iOjB9.D9Ns2lFEswSEhH7cE-CZFF7--6Bq_db89pxNF765kFHSmLpaRCA5nTzeIgo7d9Ii94wBzedFsDCpmmWDvkbCpAeHr2iRLMICAIgnuCpqjlad3a0emqiTuVBG8b1_uWnXgfEDfFDlznDckn02v1NLf4N2Mw2V55edvHKAun5rgWvrY_PLyBdwZiZMdNA2xXwkAws7MztdH5Wo-A7OXXXorzENFhEB7o96vD9ONHNe1T9ii43YwHDMzv-9ivVbLbsICpmFsn5kxLrgrmfzmCFY-icso6eBC7PclmMDIbklLQgtNy7P_VFlC1eQTRiyIKFw7F_b-zvFxd2edLqUfjY4DNCHv4yNpF5doVAETlpPQhzg-IBKw0wUrPtGxI-nndB_M3K0Z77BLyBazD5NKD0vWO5G1RDMT_UTqUfkR9PBJwKHH4rIwRVzPZjv_WznOS77ofDLhQIGgfgkvLBmSM9_L-J7jjsGDG6_2pdgMsWQsHURwNUkN91xeRWNkqm9vlIBi8hXdAXvYiTrj6F4TaZBpLfg1EeDkfiHteDP0QIRd6DIytbp5qDoGitpHCHBJh992SGq_x75qgurpC-tBKdBm626toMxvc6tnotIn_hRHgq-_1so7bQdpmpajQnyHf4Pu8KMQl-jBtSI8QihPQOLe5ArYu3S2tLEyy8pbo_epnI"
+"base_path" : "."
+"base_url" : "https://api.crowdin.com"
+
+#
+# Choose file structure in Crowdin
+# e.g. true or false
+#
+"preserve_hierarchy": false
+
+#
+# Files configuration
+#
+files: [
+ {
+  #
+  # Source files filter
+  # e.g. "/resources/en/*.json"
+  #
+  "source" : "GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings",
+
+  #
+  # Where translations will be placed
+  # e.g. "/resources/%two_letters_code%/%original_file_name%"
+  #
+  "translation" : "GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings",
+
+  #
+  # Files or directories for ignore
+  # e.g. ["/**/?.txt", "/**/[0-9].txt", "/**/*\?*.txt"]
+  #
+  #"ignore" : [],
+
+  #
+  # The dest allows you to specify a file name in Crowdin
+  # e.g. "/messages.json"
+  #
+  #"dest" : "",
+
+  #
+  # File type
+  # e.g. "json"
+  #
+  #"type" : "",
+
+  #
+  # The parameter "update_option" is optional. If it is not set, after the files update the translations for changed strings will be removed. Use to fix typos and for minor changes in the source strings
+  # e.g. "update_as_unapproved" or "update_without_changes"
+  #
+  #"update_option" : "",
+
+  #
+  # Start block (for XML only)
+  #
+
+  #
+  # Defines whether to translate tags attributes.
+  # e.g. 0 or 1  (Default is 1)
+  #
+  # "translate_attributes" : 1,
+
+  #
+  # Defines whether to translate texts placed inside the tags.
+  # e.g. 0 or 1 (Default is 1)
+  #
+  # "translate_content" : 1,
+
+  #
+  # This is an array of strings, where each item is the XPaths to DOM element that should be imported
+  # e.g. ["/content/text", "/content/text[@value]"]
+  #
+  # "translatable_elements" : [],
+
+  #
+  # Defines whether to split long texts into smaller text segments
+  # e.g. 0 or 1 (Default is 1)
+  #
+  # "content_segmentation" : 1,
+
+  #
+  # End block (for XML only)
+  #
+
+  #
+  # Start .properties block
+  #
+
+  #
+  # Defines whether single quote should be escaped by another single quote or backslash in exported translations
+  # e.g. 0 or 1 or 2 or 3 (Default is 3)
+  # 0 - do not escape single quote;
+  # 1 - escape single quote by another single quote;
+  # 2 - escape single quote by backslash;
+  # 3 - escape single quote by another single quote only in strings containing variables ( {0} ).
+  #
+  # "escape_quotes" : 3,
+
+  #
+  # Defines whether any special characters (=, :, ! and #) should be escaped by backslash in exported translations.
+  # e.g. 0 or 1 (Default is 0)
+  # 0 - do not escape special characters
+  # 1 - escape special characters by a backslash
+  #
+  # "escape_special_characters": 0
+  #
+
+  #
+  # End .properties block
+  #
+
+  #
+  # Does the first line contain header?
+  # e.g. true or false
+  #
+  #"first_line_contains_header" : true,
+
+  #
+  # for spreadsheets
+  # e.g. "identifier,source_phrase,context,uk,ru,fr"
+  #
+  # "scheme" : "",
+ }
+]
