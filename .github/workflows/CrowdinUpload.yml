@@ -5,7 +5,7 @@ on:
     paths:
       - 'GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings'
   workflow_run:
-    workflows: ["LocalizableStrings"]
+    workflows: [Add Localizable Strings]
     types:
       - completed
 

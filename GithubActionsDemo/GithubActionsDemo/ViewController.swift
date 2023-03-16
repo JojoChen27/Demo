@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         title = "测试文本".localized()
         title = "测试".localized()
+        title = "测试1".localized()
     }
 
 
