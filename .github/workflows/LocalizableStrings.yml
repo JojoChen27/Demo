@@ -21,6 +21,13 @@ jobs:
       run: |
         git config --global user.name "Localization Bot"
         git config --global user.email "chenchao@viabtc.com"
-        git add .
-        git commit -m "New Localizable strings by GitHub Action"
-        git push
+        # 检查仓库中是否有文件更改
+        if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "New Localizable strings by GitHub Action"
+            git push
+        else
+            echo "No changes detected, nothing to commit."
+        fi
+
+
