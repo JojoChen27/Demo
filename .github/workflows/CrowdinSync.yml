@@ -68,7 +68,7 @@ jobs:
           push_translations: ${{ github.event_name != 'pull_request' || github.base_ref != 'main' }}
           localization_branch_name: ${{ env.BRANCH_NAME }}
           create_pull_request: false
-          skip_untranslated_files: true
+          skip_untranslated_strings: false
           export_only_approved: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
