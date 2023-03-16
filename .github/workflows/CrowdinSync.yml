@@ -82,6 +82,7 @@ jobs:
           create_pull_request: false
           skip_untranslated_strings: false
           export_only_approved: true
+          skip_ref_checkout: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
