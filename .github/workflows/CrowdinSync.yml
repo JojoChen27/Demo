@@ -55,9 +55,14 @@ jobs:
         
       - name: Get branch name
         run: |
-          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-          echo "Branch name: $BRANCH_NAME"
+          IS_WORKFLOW_RUN=${{ github.event_name == 'workflow_run' && 'true' || 'false' }}
+          if [ "$IS_WORKFLOW_RUN" == "true" ]; then
+            BRANCH_NAME=${{ github.event.workflow_run.head_branch }}
+          else
+            BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
+          fi
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "Branch name: $BRANCH_NAME"  
 
       - name: Crowdin sync
         uses: crowdin/github-action@v1.7.1
