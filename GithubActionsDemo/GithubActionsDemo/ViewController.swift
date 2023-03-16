@@ -29,8 +29,8 @@ class ViewController: UIViewController {
         title = "测试".localized()
         title = "测试1".localized()
         title = "测试3".localized()
-        title = "测试4"
-        title = "测试5"
+        title = "测试4".localized()
+        title = "测试5".localized()
     }
 
 
