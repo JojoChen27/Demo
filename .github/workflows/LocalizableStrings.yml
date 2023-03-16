@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-script:
+  localizable-strings:
     runs-on: macos-latest
 
     steps:
@@ -22,5 +22,5 @@ jobs:
         git config --global user.name "Localized Bot"
         git config --global user.email "chenchao@viabtc.com"
         git add .
-        git commit -m "chore: Add Localizable strings"
+        git commit -m "chore: Add Localizable strings by GitHub Action"
         git push
