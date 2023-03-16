@@ -1,9 +1,7 @@
 name: Crowdin Download
 
 on: 
-  push:
-    branches-ignore:
-      - 'main'
+  workflow_dispatch:
 
 jobs:
   crowdin-download:

@@ -1,0 +1,48 @@
+name: Crowdin Sync
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+  workflow_run:
+    workflows: [New Localizable Strings]
+    types:
+      - completed
+
+jobs:
+  crowdin-sync:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Get branch name
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
+      - name: Crowdin sync
+        uses: crowdin/github-action@v1.7.1
+        with:
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          crowdin_branch_name: "${{ env.BRANCH_NAME }}"
+          source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+          # 上传
+          upload_sources: true
+          upload_translations: false
+          # 下载
+          download_translations: ${{ github.event_name != 'pull_request' || github.base_ref != 'main' }}
+          push_translations: ${{ github.event_name != 'pull_request' || github.base_ref != 'main' }}
+          localization_branch_name: ${{ env.BRANCH_NAME }}
+          create_pull_request: false
+          skip_untranslated_files: true
+          export_only_approved: true
+          
+          
