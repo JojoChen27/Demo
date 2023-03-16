@@ -8,14 +8,38 @@ on:
     branches:
       - main
     types:
-      - opened
-      - synchronize
+      - closed
   workflow_run:
     workflows: [New Localizable Strings]
     types:
       - completed
 
 jobs:
+  upload_on_main:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get branch name
+        run: |
+          BRANCH_NAME=${{ github.event.ref }}
+          BRANCH_NAME=${BRANCH_NAME#refs/heads/}
+          echo "Branch name: $BRANCH_NAME"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Crowdin upload
+        uses: crowdin/github-action@v1.7.1
+          with:
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          crowdin_branch_name: "${{ env.BRANCH_NAME }}"
+          source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+          upload_sources: true
+          upload_translations: false
+
   crowdin-sync:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
