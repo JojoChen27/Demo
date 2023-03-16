@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         title = "测试文本".localized() 
         title = "测试".localized()
         title = "测试1".localized()
-        title = "测试3"
+        title = "测试3".localized()
     }
 
 
