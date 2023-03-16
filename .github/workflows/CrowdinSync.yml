@@ -45,6 +45,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
           # 如果是 workflow_run 事件触发，则检出 `New Localizable Strings` 工作流所在的分支；否则检出当前事件的分支
           ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.ref }}
         
