@@ -19,7 +19,7 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config --global user.name "Localized Bot"
+        git config --global user.name "Localization Bot"
         git config --global user.email "chenchao@viabtc.com"
         git add .
         git commit -m "chore: Add Localizable strings by GitHub Action"
