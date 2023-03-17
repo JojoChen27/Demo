@@ -13,5 +13,5 @@ jobs:
 
     - name: Run script
       run: |
-      chmod +x InstallDependencies
-      ./InstallDependencies
+        chmod +x InstallDependencies
+        ./InstallDependencies
