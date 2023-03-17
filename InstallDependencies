@@ -1,28 +1,39 @@
 #!/bin/bash
 
-# 检查是否已安装 Homebrew
 if command -v brew &>/dev/null; then
-    echo "Homebrew 已安装。"
+    echo "Homebrew installed."
 else
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "正在安装 Homebrew..."
+        echo "installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        echo "Homebrew 安装成功！"
+        echo "Homebrew installed successfully."
     else
-        echo "此脚本仅支持 macOS。" >&2
+        echo "This script only supports macOS" >&2
         exit 1
     fi
 fi
 
-# 安装 rbenv
-brew install rbenv ruby-build
-echo '\n# 设置rbenv\neval "$(rbenv init - zsh)"' >> ~/.zshrc
-source ~/.zshrc
 
-# 安装 ruby
-rbenv install 3.1.2
+tap="viabtc/coinex"
+cocoapods_version="1.11.3"
+fastlane_version="2.212.1"
 
-# 查看ruby安装版本
-ruby -v
+if ! brew tap | grep -q "^${tap}$"; then
+echo "${tap} tap not found, adding it now..."
+brew tap-new "${tap}"
+fi
 
+if brew search "cocoapods@${cocoapods_version}" | grep -q "cocoapods@${cocoapods_version}"; then
+echo "cocoapods@${cocoapods_version} exists"
+else
+brew extract --version="${cocoapods_version}" cocoapods "${tap}"
+fi
 
+if brew search "fastlane@${fastlane_version}" | grep -q "fastlane@${fastlane_version}"; then
+echo "fastlane@${fastlane_version} exists"
+else
+brew extract --version="${fastlane_version}" fastlane "${tap}"
+fi
+
+brew reinstall cocoapods@${cocoapods_version}
+brew reinstall fastlane@${fastlane_version}
