@@ -13,3 +13,16 @@ else
         exit 1
     fi
 fi
+
+# 安装 rbenv
+brew install rbenv ruby-build
+echo '\n# 设置rbenv\neval "$(rbenv init - zsh)"' >> ~/.zshrc
+source ~/.zshrc
+
+# 安装 ruby
+rbenv install 3.1.2
+
+# 查看ruby安装版本
+ruby -v
+
+
