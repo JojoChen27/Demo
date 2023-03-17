@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# 检查是否已安装 Homebrew
+if command -v brew &>/dev/null; then
+    echo "Homebrew 已安装。"
+else
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "正在安装 Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "Homebrew 安装成功！"
+    else
+        echo "此脚本仅支持 macOS。" >&2
+        exit 1
+    fi
+fi
