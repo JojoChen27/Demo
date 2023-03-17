@@ -36,4 +36,6 @@ brew extract --version="${fastlane_version}" fastlane "${tap}"
 fi
 
 brew reinstall cocoapods@${cocoapods_version}
+brew link --overwrite cocoapods@${cocoapods_version}
 brew reinstall fastlane@${fastlane_version}
+brew link --overwrite fastlane@${fastlane_version}
