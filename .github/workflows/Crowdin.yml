@@ -1,4 +1,4 @@
-name: Crowdin Delete
+name: Crowdin
 
 on:
   delete:
@@ -16,11 +16,12 @@ jobs:
     if: github.event_name == 'delete'
     steps:
       - name: Get branch name
+        id: get_branch
         run: |
           BRANCH_NAME="${{ github.ref }}"
           BRANCH_NAME="${BRANCH_NAME#refs/heads/}"
           echo "Deleted branch name: $BRANCH_NAME"
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "::set-output name=branch::${BRANCH_NAME}"
 
       - name: Crowdin delete
         uses: crowdin/github-action@v1.7.1
@@ -28,7 +29,7 @@ jobs:
           upload_sources: false
           upload_translations: false
           download_translations: false
-          delete_crowdin_branch: "${{ env.BRANCH_NAME }}"
+          delete_crowdin_branch: "${{ steps.get_branch.outputs.branch }}"
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
@@ -39,20 +40,14 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Get branch name
-        run: |
-          BRANCH_NAME="${{ github.ref }}"
-          BRANCH_NAME="${BRANCH_NAME#refs/heads/}"
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+        uses: actions/checkout@v3
 
       - name: Crowdin Upload
         uses: crowdin/github-action@v1.7.1
         with:
           upload_sources: true
           upload_translations: false
-          crowdin_branch_name: "${{ env.BRANCH_NAME }}"
+          crowdin_branch_name: main
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings

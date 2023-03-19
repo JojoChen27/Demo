@@ -1,89 +1,33 @@
-# name: Crowdin Sync
+name: Crowdin Upload
 
-# on:
-#   push:
-#     branches-ignore:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-#     types:
-#       - closed
-#   workflow_run:
-#     workflows: [New Localizable Strings]
-#     types:
-#       - completed
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
-# jobs:
-#   upload_on_main:
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
+jobs:
+  upload-on-main:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#       - name: Get branch name
-#         run: |
-#           BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-#           echo "Branch name: $BRANCH_NAME"
-#           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+      - name: Get branch name
+        run: |
+          BRANCH_NAME="${{ github.ref }}"
+          BRANCH_NAME="${BRANCH_NAME#refs/heads/}"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
-#       - name: Crowdin upload
-#         uses: crowdin/github-action@v1.7.1
-#         with:
-#           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-#           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-#           crowdin_branch_name: "${{ env.BRANCH_NAME }}"
-#           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
-#           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
-#           upload_sources: true
-#           upload_translations: false
-
-#   crowdin-sync:
-#     runs-on: ubuntu-latest
-#     if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
-#     steps:
-#       - name: Checkout repository for workflow_run event
-#         if: github.event_name == 'workflow_run'
-#         uses: actions/checkout@v3
-#         with:
-#           ref: ${{ github.event.workflow_run.head_branch }}
-
-#       - name: Checkout default
-#         if: github.event_name != 'workflow_run'
-#         uses: actions/checkout@v3
-        
-#       - name: Get branch name
-#         run: |
-#           IS_WORKFLOW_RUN=${{ github.event_name == 'workflow_run' && 'true' || 'false' }}
-#           if [ "$IS_WORKFLOW_RUN" == "true" ]; then
-#             BRANCH_NAME=${{ github.event.workflow_run.head_branch }}
-#           else
-#             BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-#           fi
-#           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-#           echo "Branch name: $BRANCH_NAME"  
-
-#       - name: Crowdin sync
-#         uses: crowdin/github-action@v1.7.1
-#         with:
-#           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-#           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-#           crowdin_branch_name: "${{ env.BRANCH_NAME }}"
-#           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
-#           translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
-#           # 上传
-#           upload_sources: true
-#           upload_translations: false
-#           # 下载
-#           download_translations: ${{ github.event_name != 'pull_request' || env.BRANCH_NAME != 'main' }}
-#           push_translations: ${{ github.event_name != 'pull_request' || env.BRANCH_NAME != 'main' }}
-#           localization_branch_name: ${{ env.BRANCH_NAME }}
-#           create_pull_request: false
-#           skip_untranslated_files: true
-#           export_only_approved: true
-#           skip_ref_checkout: true
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-          
+      - name: Crowdin Upload
+        uses: crowdin/github-action@v1.7.1
+        with:
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          crowdin_branch_name: "${{ env.BRANCH_NAME }}"
+          source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
+          translation: GithubActionsDemo/GithubActionsDemo/%osx_code%/Localizable.strings
+          upload_sources: true
+          upload_translations: false
