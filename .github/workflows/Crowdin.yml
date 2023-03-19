@@ -47,7 +47,7 @@ jobs:
         with:
           upload_sources: true
           upload_translations: false
-          crowdin_branch_name: main
+          crowdin_branch_name: "main"
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
