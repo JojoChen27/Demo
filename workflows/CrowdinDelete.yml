@@ -17,8 +17,8 @@ jobs:
     steps:
       - name: Get branch name
         run: |
-          BRANCH_NAME="${{ github.ref }}"
-          BRANCH_NAME="${BRANCH_NAME#refs/heads/}"
+          BRANCH_NAME=${{ github.event.ref }}
+          BRANCH_NAME=${BRANCH_NAME#refs/heads/}
           echo "Deleted branch name: $BRANCH_NAME"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
@@ -28,7 +28,7 @@ jobs:
           upload_sources: false
           upload_translations: false
           download_translations: false
-          delete_crowdin_branch: "${{ env.BRANCH_NAME }}"
+          delete_crowdin_branch: ${{ env.BRANCH_NAME }}
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
           source: GithubActionsDemo/GithubActionsDemo/zh-Hans.lproj/Localizable.strings
