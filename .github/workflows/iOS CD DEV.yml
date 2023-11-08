@@ -17,7 +17,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK_URL <<CURL_DATA
+          curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
             "attachments": [
               {
