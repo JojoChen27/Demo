@@ -20,6 +20,11 @@ jobs:
           echo "开始执行输出1111"
           echo "开始执行输出1111"
           exit 1
+  notify-slack:
+    if: always() 
+    uses: ./.github/workflows/slack-notifications.yml
+    with:
+      status: 'failure'
       # - name: Notify Slack on Success
       #   if: success()
       #   uses: ./.github/workflows/slack-notifications.yml
@@ -32,11 +37,11 @@ jobs:
       #     pr_body: ${{ github.event.pull_request.body }}
       #     base_sha: ${{ github.event.pull_request.base.sha }}
       #     head_sha: ${{ github.event.pull_request.head.sha }}
-      - name: Notify Slack on Failure
-        if: failure()
-        uses: ./.github/workflows/slack-notifications.yml
-        with:
-          status: 'failure'
+      # - name: Notify Slack on Failure
+      #   if: failure()
+      #   uses: ./.github/workflows/slack-notifications.yml
+      #   with:
+      #     status: 'failure'
           # failure_message_title: '❌ CoinEx iOS 打包失败，请查看运行错误'
         
       # - name: Notify Slack on Success
