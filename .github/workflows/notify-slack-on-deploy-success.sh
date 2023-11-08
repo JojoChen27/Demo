@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# 参数:
+#   SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
+#   SLACK_MESSAGE_TITLE: "✅ CoinEx iOS 打包成功，已上传到服务器"
+#   PR_HTML_URL: ${{ github.event.pull_request.html_url }}
+#   PR_NUMBER: ${{ github.event.pull_request.number }}
+#   PR_TITLE: ${{ github.event.pull_request.title }}
+#   PR_BODY: ${{ github.event.pull_request.body }}
+#   PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+#   PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
 # 获取Body
 escaped_pr_body="${PR_BODY//$'\n'/\\n}"
 if [ -z "$escaped_pr_body" ]; then
