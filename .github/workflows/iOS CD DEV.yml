@@ -21,65 +21,76 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
         run: |
-          commits=$(git log --pretty=format:"%h - %s (%an)" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
-          echo "::set-output name=commit_messages::$commits"
+          # 获取PR信息
+          pr_url="${{ github.event.pull_request.html_url }}"
+          echo "PR Link: $pr_url"
+          pr_number="${{ github.event.pull_request.number }}"
+          pr_title="${{ github.event.pull_request.title }}"
+          pr_body="${{ github.event.pull_request.body }}"
+          escaped_pr_body="${pr_body//$'\n'/\\n}"
 
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          PR_BODY="${{ github.event.pull_request.body }}"
-          ESCAPED_PR_BODY="${PR_BODY//$'\n'/\\n}"
+          # 获取提交信息
+          commits=$(git log --pretty=format:"%h - %s (%an)" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          # GitHub 仓库 URL
+          repo_url="https://github.com/JojoChen27/Demo"
+          # 提取每个提交的哈希和消息，并构建链接
+          formatted_commits=""
+          while read -r line; do
+            commit_hash=$(echo "$line" | awk '{print $1}')
+            commit_message=$(echo "$line" | awk '{$1=""; print $0}')
+            commit_url="$repo_url/commit/$commit_hash"
+            formatted_commit="<$commit_url|${commit_message}>"
+            formatted_commits="${formatted_commits}${formatted_commit}\n"
+          done <<< "$commits"
+
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
-            "attachments": [
+            "blocks": [
               {
-                "blocks": [
-                  {
-                    "type": "header",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "CoinEx iOS 打包完成，已上传到服务器",
-                      "emoji": true
-                    }
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "✅ CoinEx iOS 打包完成，已上传到服务器",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "点击按钮进行下载"
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "下载",
+                    "emoji": true
                   },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "点击按钮进行下载"
-                    },
-                    "accessory": {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "下载",
-                        "emoji": true
-                      },
-                      "url": "http://3.33.146.9:5000/",
-                      "style": "primary"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "<https://github.com/JojoChen27/Demo/pull/$PR_NUMBER|#$PR_NUMBER $PR_TITLE>"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "$ESCAPED_PR_BODY"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "- <http://example.com/link1|fix: 切换语言时，趋势图重绘；合约新手福利入口兼容rtl>\n- <http://example.com/link2|fix: 产品反馈线上兑换功能币种切换问题修复>"
-                    }
-                  }
-                ]
+                  "url": "http://3.33.146.9:5000/",
+                  "style": "primary"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "<https://github.com/JojoChen27/Demo/pull/$pr_number|#$pr_number $pr_title>"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "$escaped_pr_body"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "$formatted_commits"
+                }
               }
             ]
           }
