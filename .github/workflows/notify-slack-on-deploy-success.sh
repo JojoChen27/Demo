@@ -1,17 +1,13 @@
 #!/bin/bash
 
-# 获取PR信息
-pr_url="$PR_HTML_URL"
-pr_number="$PR_NUMBER"
-pr_title="$PR_TITLE"
-
 # 获取Body
-pr_body="$PR_BODY"
-escaped_pr_body="${pr_body//$'\n'/\\n}"
+escaped_pr_body="${PR_BODY//$'\n'/\\n}"
 if [ -z "$escaped_pr_body" ]; then
   escaped_pr_body="未填写⭕"
 fi
 escaped_pr_body="*Description:*\n$escaped_pr_body"
+
+echo $escaped_pr_body
 
 # 获取提交信息
 commits=$(git log --pretty=format:"%H - %s (%an)" "$PR_BASE_SHA..$PR_HEAD_SHA")
@@ -20,11 +16,12 @@ formatted_commits=""
 while read -r line; do
   commit_hash=$(echo "$line" | awk '{print $1}')
   commit_message=$(echo "$line" | awk '{$1=""; print $0}')
-  commit_url="$pr_url/commits/$commit_hash"
+  commit_url="$PR_HTML_URL/commits/$commit_hash"
   formatted_commit="<$commit_url|${commit_message}>"
   formatted_commits="${formatted_commits}${formatted_commit}\n"
 done <<< "$commits"
 formatted_commits="*Commits:*\n$formatted_commits"
+echo $formatted_commits
 
 curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
 {
@@ -58,7 +55,7 @@ curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "<$pr_url|#$pr_number $pr_title>"
+        "text": "<$PR_HTML_URL|#$PR_NUMBER $PR_TITLE>"
       }
     },
     {
