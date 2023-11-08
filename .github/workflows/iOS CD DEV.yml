@@ -19,7 +19,7 @@ jobs:
           echo "开始执行输出"
           echo "开始执行输出1111"
           echo "开始执行输出1111"
-#          exit 1
+          exit 1
       - name: Notify Slack on Success
         if: success()
         env:
@@ -99,6 +99,43 @@ jobs:
                 "text": {
                   "type": "mrkdwn",
                   "text": "$formatted_commits"
+                }
+              }
+            ]
+          }
+          CURL_DATA
+      - name: Notify Slack on Failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
+          SLACK_MESSAGE_TITLE: "❌ CoinEx iOS 打包失败，请查看运行错误"
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "$SLACK_MESSAGE_TITLE",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "点击按钮查看运行错误"
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "查看",
+                    "emoji": true
+                  },
+                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                  "style": "danger"
                 }
               }
             ]
