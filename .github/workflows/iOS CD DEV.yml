@@ -10,6 +10,8 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: macOS-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Print
         run: |
           echo "开始执行输出"
@@ -21,7 +23,7 @@ jobs:
         run: |
           commits=$(git log --pretty=format:"%h - %s (%an)" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
           echo "::set-output name=commit_messages::$commits"
-          
+
           PR_NUMBER="${{ github.event.pull_request.number }}"
           PR_TITLE="${{ github.event.pull_request.title }}"
           PR_BODY="${{ github.event.pull_request.body }}"
