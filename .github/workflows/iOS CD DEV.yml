@@ -31,7 +31,7 @@ jobs:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          bash ./.github/workflows/notify-slack-on-deploy-success.sh
+          python3 ./.github/workflows/notify-slack-on-deploy-success.py
       - name: Notify Slack on Failure
         if: failure()
         env:
