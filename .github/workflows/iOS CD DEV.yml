@@ -19,9 +19,13 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
         run: |
+          commits=$(git log --pretty=format:"%h - %s (%an)" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          echo "::set-output name=commit_messages::$commits"
+          
           PR_NUMBER="${{ github.event.pull_request.number }}"
           PR_TITLE="${{ github.event.pull_request.title }}"
           PR_BODY="${{ github.event.pull_request.body }}"
+          ESCAPED_PR_BODY="${PR_BODY//$'\n'/\\n}"
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
             "attachments": [
@@ -39,7 +43,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "点击右边的按钮进行下载👉🏻"
+                      "text": "点击按钮进行下载"
                     },
                     "accessory": {
                       "type": "button",
@@ -63,7 +67,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "$PR_BODY"
+                      "text": "$ESCAPED_PR_BODY"
                     }
                   },
                   {
