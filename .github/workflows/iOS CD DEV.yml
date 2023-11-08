@@ -13,12 +13,14 @@ jobs:
       - name: Print
         run: |
           echo "开始执行输出"
-          exit 1
+#          exit 1
       - name: Notify Slack on Success
         if: success()
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
         run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          PR_TITLE=${{ github.event.pull_request.title }}
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
             "attachments": [
@@ -53,7 +55,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "<http://example.com/link1|#527 feat: 消息中心网络替换>"
+                      "text": "<https://github.com/JojoChen27/Demo/pull/$PR_NUMBER|#$PR_NUMBER $PR_TITLE>"
                     }
                   },
                   {
