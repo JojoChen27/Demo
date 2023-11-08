@@ -1,9 +1,10 @@
+import sys
 import json
 import os
 import subprocess
 
 # 获取环境变量并保存到变量中
-slack_webhook = os.getenv("SLACK_WEBHOOK")
+slack_webhook = sys.argv[0]
 slack_message_title = os.getenv("SLACK_MESSAGE_TITLE")
 pr_html_url = os.getenv("PR_HTML_URL")
 pr_number = os.getenv("PR_NUMBER")
@@ -22,7 +23,7 @@ print(pr_head_sha)
 
 # 获取Body
 if not pr_body:
-    pr_body = "未填写⭕"
+    pr_body = "⭕ 未填写"
 pr_body = f"*Description:*\n{pr_body}"
 print(pr_body)
 
@@ -111,3 +112,4 @@ try:
     print("JSON数据已成功发送到Slack Webhook。")
 except subprocess.CalledProcessError as e:
     print(f"发送JSON数据到Slack Webhook时发生错误: {e}")
+    exit(1)

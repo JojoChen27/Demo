@@ -22,7 +22,7 @@ jobs:
       - name: Notify Slack on Success
         if: success()
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
+          # SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
           SLACK_MESSAGE_TITLE: "✅ CoinEx iOS 打包成功，已上传到服务器"
           PR_HTML_URL: ${{ github.event.pull_request.html_url }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -30,8 +30,7 @@ jobs:
           PR_BODY: ${{ github.event.pull_request.body }}
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          python3 ./.github/workflows/notify-slack-on-deploy-success.py
+        run: python3 ./.github/workflows/notify-slack-on-success.py ${{ secrets.SLACK_MOBILE_WEBHOOK }}
       - name: Notify Slack on Failure
         if: failure()
         env:
