@@ -1,0 +1,75 @@
+name: iOS CD DEV
+
+on:
+  pull_request:
+    types: [closed]
+    branches: dev*
+
+jobs:
+  dev-deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: macOS-latest
+    steps:
+      - name: Print
+        run: echo "开始执行输出"
+      - name: Notify Slack on Success
+        if: success()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data @-  $SLACK_WEBHOOK_URL <<CURL_DATA
+          {
+            "attachments": [
+              {
+                "blocks": [
+                  {
+                    "type": "header",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "CoinEx iOS 打包完成，已上传到服务器",
+                      "emoji": true
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "点击右边的按钮进行下载👉🏻"
+                    },
+                    "accessory": {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "下载",
+                        "emoji": true
+                      },
+                      "url": "http://3.33.146.9:5000/",
+                      "style": "primary"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "<http://example.com/link1|#527 feat: 消息中心网络替换>"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "【【合约专题】ios-新手福利入口浮窗收起的ui在镜像多语言的方向也需要翻转】\n https://www.tapd.cn/44167908/bugtrace/bugs/view?bug_id=1144167908001032745"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "- <http://example.com/link1|fix: 切换语言时，趋势图重绘；合约新手福利入口兼容rtl>\n- <http://example.com/link2|fix: 产品反馈线上兑换功能币种切换问题修复>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+          CURL_DATA
