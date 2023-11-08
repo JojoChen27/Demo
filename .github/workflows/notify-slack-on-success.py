@@ -4,7 +4,7 @@ import os
 import subprocess
 
 # 获取环境变量并保存到变量中
-slack_webhook = sys.argv[0]
+slack_webhook = sys.argv[1]
 slack_message_title = os.getenv("SLACK_MESSAGE_TITLE")
 pr_html_url = os.getenv("PR_HTML_URL")
 pr_number = os.getenv("PR_NUMBER")
