@@ -1,6 +1,6 @@
+import sys
 import os
 import json
-import requests
 
 slack_webhook = sys.argv[1]
 
@@ -37,7 +37,7 @@ payload_data = {
 
 # 将payload_data字典转换为JSON字符串
 payload_json = json.dumps(payload_data, indent=2)
-# print(payload_json)
+print(payload_json)
 
 # 使用subprocess执行curl命令
 curl_command = [
