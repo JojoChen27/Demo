@@ -19,10 +19,10 @@ jobs:
           echo "开始执行输出"
           echo "开始执行输出1111"
           echo "开始执行输出1111"
+          exit 1
       - name: Notify Slack on Success
         if: success()
         env:
-          # SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
           SLACK_MESSAGE_TITLE: "✅ CoinEx iOS 打包成功，已上传到服务器"
           PR_HTML_URL: ${{ github.event.pull_request.html_url }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -34,37 +34,5 @@ jobs:
       - name: Notify Slack on Failure
         if: failure()
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
           SLACK_MESSAGE_TITLE: "❌ CoinEx iOS 打包失败，请查看运行错误"
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": "$SLACK_MESSAGE_TITLE",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "点击按钮查看运行错误"
-                },
-                "accessory": {
-                  "type": "button",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "查看",
-                    "emoji": true
-                  },
-                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                  "style": "danger"
-                }
-              }
-            ]
-          }
-          CURL_DATA
+        run: python3 ./.github/workflows/notify-slack-on-failure.py ${{ secrets.SLACK_MOBILE_WEBHOOK }}

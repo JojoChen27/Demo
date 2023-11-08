@@ -13,19 +13,11 @@ pr_body = os.getenv("PR_BODY")
 pr_base_sha = os.getenv("PR_BASE_SHA")
 pr_head_sha = os.getenv("PR_HEAD_SHA")
 
-print(slack_webhook)
-print(slack_message_title)
-print(pr_html_url)
-print(pr_number)
-print(pr_title)
-print(pr_base_sha)
-print(pr_head_sha)
-
 # 获取Body
 if not pr_body:
     pr_body = "⭕ 未填写"
 pr_body = f"*Description:*\n{pr_body}"
-print(pr_body)
+# print(pr_body)
 
 # 获取提交信息
 git_command = f'git log --pretty=format:"%H - %s (%an)" {pr_base_sha}..{pr_head_sha}'
@@ -40,7 +32,7 @@ for line in commits.splitlines():
     formatted_commit = f"<{commit_url}|{commit_message}>"
     formatted_commits += f"{formatted_commit}\n"
 formatted_commits = f"*Commits:*\n{formatted_commits}"
-print(formatted_commits)
+# print(formatted_commits)
 
 payload_data = {
     "blocks": [
@@ -95,7 +87,7 @@ payload_data = {
 
 # 将payload_data字典转换为JSON字符串
 payload_json = json.dumps(payload_data, indent=2)
-print(payload_json)
+# print(payload_json)
 
 # 使用subprocess执行curl命令
 curl_command = [
