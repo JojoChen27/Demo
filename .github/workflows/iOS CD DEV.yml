@@ -33,9 +33,10 @@ jobs:
           # 获取Body
           pr_body="${{ github.event.pull_request.body }}"
           escaped_pr_body="${pr_body//$'\n'/\\n}"
-          if [ -n "$escaped_pr_body" ]; then
-            escaped_pr_body="*Description:*\n$escaped_pr_body"
+          if [ -z "$escaped_pr_body" ]; then
+            escaped_pr_body="未填写⭕"
           fi
+          escaped_pr_body="*Description:*\n$escaped_pr_body"
 
           # 获取提交信息
           commits=$(git log --pretty=format:"%H - %s (%an)" "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}")
@@ -48,9 +49,7 @@ jobs:
             formatted_commit="<$commit_url|${commit_message}>"
             formatted_commits="${formatted_commits}${formatted_commit}\n"
           done <<< "$commits"
-          if [ -n "$formatted_commits" ]; then
-            formatted_commits="*Commits:*\n$formatted_commits"
-          fi
+          formatted_commits="*Commits:*\n$formatted_commits"
 
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
