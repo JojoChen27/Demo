@@ -21,6 +21,7 @@ jobs:
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           PR_TITLE=${{ github.event.pull_request.title }}
+          PR_BODY=${{ github.event.pull_request.body }}
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
             "attachments": [
@@ -62,7 +63,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "【【合约专题】ios-新手福利入口浮窗收起的ui在镜像多语言的方向也需要翻转】\n https://www.tapd.cn/44167908/bugtrace/bugs/view?bug_id=1144167908001032745"
+                      "text": "$PR_BODY"
                     }
                   },
                   {
