@@ -10,6 +10,14 @@
 #   PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
 #   PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
+echo $SLACK_MESSAGE_TITLE
+echo $PR_HTML_URL
+echo $PR_NUMBER
+echo $PR_TITLE
+echo $PR_BASE_SHA
+echo $PR_HEAD_SHA
+echo $PR_BODY
+
 # 获取Body
 escaped_pr_body="${PR_BODY//$'\n'/\\n}"
 if [ -z "$escaped_pr_body" ]; then
