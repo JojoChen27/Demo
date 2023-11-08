@@ -19,9 +19,9 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          PR_TITLE=${{ github.event.pull_request.title }}
-          PR_BODY=$(printf %q "${{ github.event.pull_request.body }}")
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_BODY="$(printf %q "${{ github.event.pull_request.body }}")"
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
             "attachments": [
