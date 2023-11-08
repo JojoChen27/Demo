@@ -18,6 +18,7 @@ jobs:
         run: |
           echo "开始执行输出"
           echo "开始执行输出1111"
+          echo "开始执行输出1111"
 #          exit 1
       - name: Notify Slack on Success
         if: success()
