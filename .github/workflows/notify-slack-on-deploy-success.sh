@@ -10,6 +10,8 @@
 #   PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
 #   PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
+以下的参数PR_BODY等有可能所多行的，我该怎么格式化curl的json让其可用
+
 echo $SLACK_MESSAGE_TITLE
 echo $PR_HTML_URL
 echo $PR_NUMBER
@@ -19,13 +21,11 @@ echo $PR_HEAD_SHA
 echo $PR_BODY
 
 # 获取Body
-escaped_pr_body="${PR_BODY//$'\n'/\\n}"
-if [ -z "$escaped_pr_body" ]; then
-  escaped_pr_body="未填写⭕"
+if [ -z "$PR_BODY" ]; then
+  PR_BODY="未填写⭕"
 fi
-escaped_pr_body="*Description:*\n$escaped_pr_body"
-
-echo $escaped_pr_body
+PR_BODY="*Description:*\n$PR_BODY"
+echo $PR_BODY
 
 # 获取提交信息
 commits=$(git log --pretty=format:"%H - %s (%an)" "$PR_BASE_SHA..$PR_HEAD_SHA")
@@ -41,7 +41,7 @@ done <<< "$commits"
 formatted_commits="*Commits:*\n$formatted_commits"
 echo $formatted_commits
 
-curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
+payload_json = $(cat <<JSON
 {
   "blocks": [
     {
@@ -80,7 +80,7 @@ curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "$escaped_pr_body"
+        "text": "$PR_BODY"
       }
     },
     {
@@ -92,4 +92,11 @@ curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL
     }
   ]
 }
-CURL_DATA
+JSON
+)
+
+escaped_payload_json=$(python -c "import json; print(json.dumps($payload_json))")
+
+echo $escaped_payload_json
+
+curl -X POST -H 'Content-type: application/json' --data "$escaped_payload_json" $SLACK_WEBHOOK
