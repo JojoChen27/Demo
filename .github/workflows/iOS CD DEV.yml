@@ -22,13 +22,19 @@ jobs:
         if: success()
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
+          SLACK_MESSAGE_TITLE: "✅ CoinEx iOS 打包完成，已上传到服务器"
         run: |
           # 获取PR信息
           pr_url="${{ github.event.pull_request.html_url }}"
           pr_number="${{ github.event.pull_request.number }}"
           pr_title="${{ github.event.pull_request.title }}"
+
+          # 获取Body
           pr_body="${{ github.event.pull_request.body }}"
           escaped_pr_body="${pr_body//$'\n'/\\n}"
+          if [ -n "$escaped_pr_body" ]; then
+            escaped_pr_body="*Description:*\n$escaped_pr_body"
+          fi
 
           # 获取提交信息
           commits=$(git log --pretty=format:"%H - %s (%an)" "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}")
@@ -41,6 +47,9 @@ jobs:
             formatted_commit="<$commit_url|${commit_message}>"
             formatted_commits="${formatted_commits}${formatted_commit}\n"
           done <<< "$commits"
+          if [ -n "$formatted_commits" ]; then
+            formatted_commits="*Commits:*\n$formatted_commits"
+          fi
 
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
@@ -49,7 +58,7 @@ jobs:
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text": "✅ CoinEx iOS 打包完成，已上传到服务器",
+                  "text": "$SLACK_MESSAGE_TITLE",
                   "emoji": true
                 }
               },
@@ -81,14 +90,14 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Description:*\n$escaped_pr_body"
+                  "text": "$escaped_pr_body"
                 }
               },
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Commits:*\n$formatted_commits"
+                  "text": "$formatted_commits"
                 }
               }
             ]
