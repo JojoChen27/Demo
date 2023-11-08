@@ -12,6 +12,14 @@ pr_body = os.getenv("PR_BODY")
 pr_base_sha = os.getenv("PR_BASE_SHA")
 pr_head_sha = os.getenv("PR_HEAD_SHA")
 
+print(slack_webhook)
+print(slack_message_title)
+print(pr_html_url)
+print(pr_number)
+print(pr_title)
+print(pr_base_sha)
+print(pr_head_sha)
+
 # 获取Body
 if not pr_body:
     pr_body = "未填写⭕"
