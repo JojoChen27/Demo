@@ -23,22 +23,19 @@ jobs:
         run: |
           # 获取PR信息
           pr_url="${{ github.event.pull_request.html_url }}"
-          echo "PR Link: $pr_url"
           pr_number="${{ github.event.pull_request.number }}"
           pr_title="${{ github.event.pull_request.title }}"
           pr_body="${{ github.event.pull_request.body }}"
           escaped_pr_body="${pr_body//$'\n'/\\n}"
 
           # 获取提交信息
-          commits=$(git log --pretty=format:"%h - %s (%an)" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
-          # GitHub 仓库 URL
-          repo_url="https://github.com/JojoChen27/Demo"
+          commits=$(git log --pretty=format:"%H - %s (%an)" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
           # 提取每个提交的哈希和消息，并构建链接
           formatted_commits=""
           while read -r line; do
             commit_hash=$(echo "$line" | awk '{print $1}')
             commit_message=$(echo "$line" | awk '{$1=""; print $0}')
-            commit_url="$repo_url/commit/$commit_hash"
+            commit_url="$pr_url/commits/$commit_hash"
             formatted_commit="<$commit_url|${commit_message}>"
             formatted_commits="${formatted_commits}${formatted_commit}\n"
           done <<< "$commits"
@@ -75,7 +72,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "<https://github.com/JojoChen27/Demo/pull/$pr_number|#$pr_number $pr_title>"
+                  "text": "<$pr_url|#$pr_number $pr_title>"
                 }
               },
               {
