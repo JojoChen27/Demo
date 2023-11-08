@@ -11,7 +11,9 @@ jobs:
     runs-on: macOS-latest
     steps:
       - name: Print
-        run: echo "开始执行输出"
+        run: |
+          echo "开始执行输出"
+          exit 1
       - name: Notify Slack on Success
         if: success()
         env:
