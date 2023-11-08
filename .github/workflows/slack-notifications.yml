@@ -1,52 +1,71 @@
-name: iOS CD DEV
+name: Slack Notification
 
 on:
-  pull_request:
-    types: [closed]
-    branches: dev*
+  workflow_call:
+    inputs:
+      status:
+        required: true
+        type: string
+      success_message_title:
+        required: false
+        type: string
+      failure_message_title:
+          required: false
+          type: string
+      pr_html_url:
+        required: false
+        type: string
+      pr_number:
+        required: false
+        type: string
+      pr_title:
+        required: false
+        type: string
+      pr_body:
+        required: false
+        type: string
+      base_sha:
+        required: false
+        type: string
+      head_sha:
+        required: false
+        type: string
 
 jobs:
-  dev-deploy:
-    if: github.event.pull_request.merged == true
-    runs-on: macOS-latest
+  notify-slack:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Print
-        run: |
-          echo "开始执行输出"
-          echo "开始执行输出1111"
-          echo "开始执行输出1111"
-          exit 1
-      - name: Notify Slack on Success
-        if: success()
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
-          SLACK_MESSAGE_TITLE: "✅ CoinEx iOS 打包完成，已上传到服务器"
-        run: |
-          # 获取PR信息
-          pr_url="${{ github.event.pull_request.html_url }}"
-          pr_number="${{ github.event.pull_request.number }}"
-          pr_title="${{ github.event.pull_request.title }}"
+    - name: Notify Slack
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
+        STATUS: ${{ inputs.status }}
+        SUCCESS_MESSAGE_TITLE: ${{ inputs.success_message_title }}
+        FAILURE_MESSAGE_TITLE: ${{ inputs.failure_message_title }}
+        PR_HTML_URL: ${{ inputs.pr_html_url }}
+        PR_NUMBER: ${{ inputs.pr_number }}
+        PR_TITLE: ${{ inputs.pr_title }}
+        PR_BODY: ${{ inputs.pr_body }}
+        PR_BASE_SHA: ${{ inputs.base_sha }}
+        PR_HEAD_SHA: ${{ inputs.head_sha }}
+      run: |
+        # 根据STATUS确定消息内容
+        if [ "$STATUS" == "success" ]; then
 
           # 获取Body
-          pr_body="${{ github.event.pull_request.body }}"
-          escaped_pr_body="${pr_body//$'\n'/\\n}"
+          escaped_pr_body="${PR_BODY//$'\n'/\\n}"
           if [ -z "$escaped_pr_body" ]; then
             escaped_pr_body="未填写⭕"
           fi
           escaped_pr_body="*Description:*\n$escaped_pr_body"
 
           # 获取提交信息
-          commits=$(git log --pretty=format:"%H - %s (%an)" "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}")
+          commits=$(git log --pretty=format:"%H - %s (%an)" "$PR_BASE_SHA..$PR_HEAD_SHA")
           # 提取每个提交的哈希和消息，并构建链接
           formatted_commits=""
           while read -r line; do
             commit_hash=$(echo "$line" | awk '{print $1}')
             commit_message=$(echo "$line" | awk '{$1=""; print $0}')
-            commit_url="$pr_url/commits/$commit_hash"
+            commit_url="$PR_HTML_URL/commits/$commit_hash"
             formatted_commit="<$commit_url|${commit_message}>"
             formatted_commits="${formatted_commits}${formatted_commit}\n"
           done <<< "$commits"
@@ -84,7 +103,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "<$pr_url|#$pr_number $pr_title>"
+                  "text": "<$PR_HTML_URL|#$PR_NUMBER $PR_TITLE>"
                 }
               },
               {
@@ -104,12 +123,7 @@ jobs:
             ]
           }
           CURL_DATA
-      - name: Notify Slack on Failure
-        if: failure()
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_MOBILE_WEBHOOK }}
-          SLACK_MESSAGE_TITLE: "❌ CoinEx iOS 打包失败，请查看运行错误"
-        run: |
+        elif [ "$STATUS" == "failure" ]; then
           curl -X POST -H 'Content-type: application/json' --data @- $SLACK_WEBHOOK <<CURL_DATA
           {
             "blocks": [
@@ -117,7 +131,7 @@ jobs:
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text": "$SLACK_MESSAGE_TITLE",
+                  "text": "$FAILURE_MESSAGE_TITLE",
                   "emoji": true
                 }
               },
@@ -141,3 +155,4 @@ jobs:
             ]
           }
           CURL_DATA
+        fi
