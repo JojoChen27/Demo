@@ -10,16 +10,6 @@
 #   PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
 #   PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
-以下的参数PR_BODY等有可能所多行的，我该怎么格式化curl的json让其可用
-
-echo $SLACK_MESSAGE_TITLE
-echo $PR_HTML_URL
-echo $PR_NUMBER
-echo $PR_TITLE
-echo $PR_BASE_SHA
-echo $PR_HEAD_SHA
-echo $PR_BODY
-
 # 获取Body
 if [ -z "$PR_BODY" ]; then
   PR_BODY="未填写⭕"
@@ -41,7 +31,7 @@ done <<< "$commits"
 formatted_commits="*Commits:*\n$formatted_commits"
 echo $formatted_commits
 
-payload_json = $(cat <<JSON
+payload_json=$(cat <<JSON
 {
   "blocks": [
     {
@@ -94,9 +84,34 @@ payload_json = $(cat <<JSON
 }
 JSON
 )
+echo $payload_json
+payload_json=$(cat <<EOF
+{
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "点击按钮进行下载"
+      },
+      "accessory": {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "下载",
+          "emoji": True
+        },
+        "url": "http://3.33.146.9:5000/",
+        "style": "primary"
+      }
+    }
+  ]
+}
+EOF
+)
+echo $payload_json
+$(python3 -c "import json; print(json.dumps($payload_json))")
 
-escaped_payload_json=$(python -c "import json; print(json.dumps($payload_json))")
+# echo $escaped_payload_json
 
-echo $escaped_payload_json
-
-curl -X POST -H 'Content-type: application/json' --data "$escaped_payload_json" $SLACK_WEBHOOK
+# curl -X POST -H 'Content-type: application/json' --data "$escaped_payload_json" $SLACK_WEBHOOK
