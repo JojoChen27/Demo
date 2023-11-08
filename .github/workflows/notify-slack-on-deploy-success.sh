@@ -14,7 +14,7 @@ fi
 escaped_pr_body="*Description:*\n$escaped_pr_body"
 
 # 获取提交信息
-commits=$(git log --pretty=format:"%H - %s (%an)" "PR_BASE_SHA..$PR_HEAD_SHA")
+commits=$(git log --pretty=format:"%H - %s (%an)" "$PR_BASE_SHA..$PR_HEAD_SHA")
 # 提取每个提交的哈希和消息，并构建链接
 formatted_commits=""
 while read -r line; do
