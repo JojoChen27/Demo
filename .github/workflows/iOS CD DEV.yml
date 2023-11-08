@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Print
         run: |
           echo "开始执行输出"
@@ -28,12 +30,8 @@ jobs:
           pr_body="${{ github.event.pull_request.body }}"
           escaped_pr_body="${pr_body//$'\n'/\\n}"
 
-
-          # 获取基础分支和头部分支的最近共同祖先
-          ancestor_sha=$(git merge-base "${{ github.event.pull_request.base.ref }}" "${{ github.event.pull_request.head.ref }}")
-          echo $ancestor_sha
           # 获取提交信息
-          commits=$(git log --pretty=format:"%H - %s (%an)" "$ancestor_sha..${{ github.event.pull_request.head.sha }}")
+          commits=$(git log --pretty=format:"%H - %s (%an)" "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}")
           # 提取每个提交的哈希和消息，并构建链接
           formatted_commits=""
           while read -r line; do
